@@ -26,6 +26,6 @@ public class FakeController {
       })
   public FakeOutput get() {
     log.info("GET /fake called");
-    return new FakeOutput(1, "fake");
+    return new FakeOutput(1, "fake", "description");
   }
 }
