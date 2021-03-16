@@ -15,7 +15,7 @@ phases:
     commands:
       - echo Build completed on `date`
       # move the jar (by wildcard, agnostic to its name) to top level app.jar
-      - mv target/libs/*.jar app.jar
+      - mv target/*.jar app.jar
 artifacts:
   files:
     # publish the now top level app.jar as the artifact
