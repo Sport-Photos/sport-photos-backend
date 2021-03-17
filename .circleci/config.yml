@@ -26,6 +26,9 @@ jobs:
       - run:
           name: Test
           command: ./mvnw test
+      # store test results
+      - store_test_results:
+          path: test-results
 
 workflows:
   # Below is the definition of your workflow.
