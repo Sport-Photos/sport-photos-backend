@@ -26,6 +26,10 @@ jobs:
       - run:
           name: Test
           command: ./mvnw test
+      # crete test results
+      - run:
+          name: Test
+          command: mkdir test-results
       # store test results
       - store_test_results:
           path: test-results
