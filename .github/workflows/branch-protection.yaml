@@ -1,7 +1,7 @@
 name: protect main from direct updates
 on:
   push:
-    branches: [ mainó ]
+    branches: [ main ]
 jobs:
   job-id:
     runs-on: ubuntu-latest
