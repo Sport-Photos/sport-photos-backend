@@ -1,0 +1,28 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: 11
+
+      - name: Add execute access to maven wrapper
+        run: chmod 755 mvnw
+
+      - name: Build
+        run: ./mvnw -B -DskipTests clean package
+
+      - name: Test
+        run: ./mvnw test
