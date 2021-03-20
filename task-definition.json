@@ -58,13 +58,13 @@
     }
   ],
   "placementConstraints": [],
-  "memory": "1024",
+  "memory": "512",
   "taskRoleArn": "arn:aws:iam::780734237838:role/ecsTaskExecutionRole",
   "compatibilities": [
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:780734237838:task-definition/sport-photos-dev-task:3",
+  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:780734237838:task-definition/sport-photos-dev-task:6",
   "family": "sport-photos-dev-task",
   "requiresAttributes": [
     {
@@ -121,8 +121,8 @@
     "FARGATE"
   ],
   "networkMode": "awsvpc",
-  "cpu": "512",
-  "revision": 3,
+  "cpu": "256",
+  "revision": 6,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
