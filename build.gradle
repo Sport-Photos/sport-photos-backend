@@ -8,6 +8,7 @@ buildscript {
         springCloudVersion = 'Hoxton.SR11'
         groovyVersion = '2.5.14'
         spockVersion = '1.3-groovy-2.5'
+        spockReportsVersion = '1.8.0'
         testcontainersVersion = '1.15.3'
         archunitVersion = '0.18.0'
         restAssuredVersion = '4.2.0'
@@ -21,6 +22,7 @@ plugins {
     id "com.diffplug.spotless" version "$spotlessVersion"
     id 'java'
     id 'groovy'
+    id 'jacoco'
     id 'org.sonarqube' version "$sonarqubeVersion"
 }
 
@@ -62,14 +64,22 @@ dependencies {
     testImplementation "com.tngtech.archunit:archunit:$archunitVersion"
     testImplementation "io.rest-assured:rest-assured:$restAssuredVersion"
     testImplementation "io.rest-assured:rest-assured-all:$restAssuredVersion"
+    testImplementation "com.athaydes:spock-reports:$spockReportsVersion"
+
 }
 
 sonarqube {
     properties {
-        property 'sonar.sourceEncoding', 'UTF-8'
-        property 'sonar.projectKey', 'Sport-Photos_sport-photos-backend'
         property 'sonar.organization', 'sport-photos'
+        property 'sonar.sourceEncoding', 'UTF-8'
+        property 'sonar.projectKey', "Sport-Photos_$project.name"
+        property 'sonar.projectName', project.name
+        property 'sonar.projectVersion', version
         property 'sonar.host.url', 'https://sonarcloud.io'
+        property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/jacoco.xml"
+        property 'sonar.binaries', "$buildDir/classes"
+        property 'sonar.exclusions', "file://$buildDir/**"
+        property "sonar.junit.reportsPath", "$buildDir/test-results/*/TEST-*.xml"
     }
 }
 
@@ -86,4 +96,18 @@ sourceSets {
         'src/test/integration',
         'src/test/functional'
     )
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
+        xml.destination file("${buildDir}/jacoco.xml")
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
 }
