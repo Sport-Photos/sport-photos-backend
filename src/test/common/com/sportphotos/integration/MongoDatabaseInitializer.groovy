@@ -15,9 +15,9 @@ class MongoDatabaseInitializer implements ApplicationContextInitializer<Configur
         MongoDatabaseContainer.initialize()
 
         TestPropertyValues values = TestPropertyValues.of(
-                "spring.data.mongodb.host=" + MongoDatabaseContainer.mongo.getContainerIpAddress(),
-                "spring.data.mongodb.port=" + MongoDatabaseContainer.mongo.getMappedPort(27017),
-                "spring.data.mongodb.database=local"
+            "spring.data.mongodb.host=" + MongoDatabaseContainer.mongo.getContainerIpAddress(),
+            "spring.data.mongodb.port=" + MongoDatabaseContainer.mongo.getMappedPort(27017),
+            "spring.data.mongodb.database=local"
         )
 
         values.applyTo(applicationContext);

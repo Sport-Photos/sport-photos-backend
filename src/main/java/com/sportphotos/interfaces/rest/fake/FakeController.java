@@ -1,7 +1,8 @@
-package com.sportphotos.fake;
+package com.sportphotos.interfaces.rest.fake;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.sportphotos.domain.fake.FakeOutput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

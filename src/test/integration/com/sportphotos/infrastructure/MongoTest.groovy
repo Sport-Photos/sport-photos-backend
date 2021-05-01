@@ -1,4 +1,4 @@
-package com.sportphotos
+package com.sportphotos.infrastructure
 
 import com.sportphotos.integration.MongoDatabaseInitializer
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
@@ -10,9 +10,9 @@ import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 
 @Retention(RetentionPolicy.RUNTIME)
-@ActiveProfiles("test")
+@ActiveProfiles('test')
 @ContextConfiguration(
-        initializers = [MongoDatabaseInitializer])
+    initializers = [MongoDatabaseInitializer])
 @ImportAutoConfiguration([MongoAutoConfiguration])
 @interface MongoTest {
 }
