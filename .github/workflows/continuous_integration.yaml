@@ -28,24 +28,17 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Cache Maven packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
       - name: Add execute access to maven wrapper
-        run: chmod 755 mvnw
+        run: chmod 755 gradlew
 
       - name: Build
-        run: ./mvnw -B -DskipTests clean package
+        run: ./gradlew build -x test --info --stacktrace
 
       - name: Test and verify
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: ./gradlew sonarqube
 
   deploy:
     needs: build

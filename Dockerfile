@@ -1,9 +1,9 @@
-FROM maven:3.6.3-adoptopenjdk-11 AS maven-build
-WORKDIR /build
+FROM adoptopenjdk:11.0.10_9-jdk-hotspot AS gradle-build
+WORKDIR /buildtmp
 COPY . ./
-RUN mvn clean package -DskipTests
+RUN ./gradlew clean spotlessApply build -x test --info --stacktrace
 
 FROM openjdk:11.0.10-jre-slim
-COPY --from=maven-build /build/target/sport-photos-backend-1.0-SNAPSHOT.jar /usr/app/sport-photos-backend-1.0-SNAPSHOT.jar
-EXPOSE 80
+COPY --from=gradle-build /buildtmp/build/libs/sport-photos-backend-1.0-SNAPSHOT.jar /usr/app/sport-photos-backend-1.0-SNAPSHOT.jar
+EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/app/sport-photos-backend-1.0-SNAPSHOT.jar"]
