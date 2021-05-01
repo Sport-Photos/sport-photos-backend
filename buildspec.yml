@@ -10,12 +10,13 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - mvn install
+      - chmod 777 gradlew
+      - ./gradlew build -x test
   post_build:
     commands:
       - echo Build completed on `date`
       # move the jar (by wildcard, agnostic to its name) to top level app.jar
-      - mv target/*.jar app.jar
+      - mv build/libs/*.jar app.jar
 artifacts:
   files:
     # publish the now top level app.jar as the artifact xxc
