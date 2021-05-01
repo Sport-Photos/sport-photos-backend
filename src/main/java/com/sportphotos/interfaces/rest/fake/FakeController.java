@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,6 @@ public class FakeController {
       })
   public FakeOutput get() {
     log.info("GET /fake called");
-    return new FakeOutput(1, "fake", "description", "COMPLETED");
+    return new FakeOutput(1, "fake", "description", "COMPLETED", LocalDate.now());
   }
 }

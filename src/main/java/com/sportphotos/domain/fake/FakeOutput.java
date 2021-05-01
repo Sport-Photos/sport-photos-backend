@@ -1,5 +1,6 @@
 package com.sportphotos.domain.fake;
 
+import java.time.LocalDate;
 import lombok.Value;
 
 @Value
@@ -8,4 +9,5 @@ public class FakeOutput {
   String name;
   String description;
   String status;
+  LocalDate dateOfSomething;
 }
