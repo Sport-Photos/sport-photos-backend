@@ -1,4 +1,4 @@
-package com.sportphotos
+package com.sportphotos.infrastructure
 
 import com.mongodb.client.MongoClient
 import org.springframework.beans.factory.annotation.Autowired

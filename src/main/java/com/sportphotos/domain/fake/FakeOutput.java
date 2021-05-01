@@ -1,4 +1,4 @@
-package com.sportphotos.fake;
+package com.sportphotos.domain.fake;
 
 import lombok.Value;
 

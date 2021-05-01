@@ -1,5 +1,4 @@
-package com.sportphotos
-
+package spec
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
@@ -10,6 +9,7 @@ class ApplicationFT extends Specification {
 
     @Autowired
     ApplicationContext context
+
 
     def 'should start Spring context'() {
         expect:

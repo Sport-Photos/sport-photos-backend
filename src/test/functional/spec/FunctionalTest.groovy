@@ -1,5 +1,6 @@
-package com.sportphotos
+package spec
 
+import com.sportphotos.Application
 import com.sportphotos.integration.MongoDatabaseInitializer
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -15,7 +16,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(classes = [Application], webEnvironment = RANDOM_PORT)
-@ActiveProfiles("test")
+@ActiveProfiles('test')
 @ContextConfiguration(initializers = [MongoDatabaseInitializer])
 @interface FunctionalTest {
 }
