@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  sport-photos-backend:
+    container_name: sport-photos-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
