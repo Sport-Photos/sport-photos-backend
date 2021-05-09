@@ -2,8 +2,11 @@ package com.sportphotos.interfaces.rest.photographers;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.sportphotos.domain.events.PhotographersService;
-import com.sportphotos.domain.events.model.Rating;
+import com.sportphotos.domain.photographers.AddRatingForm;
+import com.sportphotos.domain.photographers.PhotographersMapper;
+import com.sportphotos.domain.photographers.PhotographersService;
+import com.sportphotos.domain.photographers.UpdateRatingForm;
+import com.sportphotos.domain.photographers.model.Rating;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,10 +35,6 @@ public class PhotographersController {
   private final PhotographersService service;
   private final PhotographersMapper mapper;
 
-  /**
-   * Multipart issue explained in
-   * https://github.com/springdoc/springdoc-openapi/issues/820#issuecomment-672875450
-   */
   @PostMapping(
       value = "/{photographer_id}/ratings",
       produces = APPLICATION_JSON_VALUE,
@@ -56,12 +56,41 @@ public class PhotographersController {
           String photographerId,
       UriComponentsBuilder b) {
 
-    Rating saved = service.rate(photographerId, mapper.map(addRatingForm));
+    Rating saved = service.rate(photographerId, addRatingForm);
 
     UriComponents uriComponents =
         b.path("/api/photographers/{photographer_id}/ratings/{rating_id}")
             .buildAndExpand(photographerId, saved.getId());
 
     return ResponseEntity.created(uriComponents.toUri()).body(saved);
+  }
+
+  @PatchMapping(
+      value = "/{photographer_id}/ratings/{rating_id}",
+      produces = APPLICATION_JSON_VALUE,
+      consumes = APPLICATION_JSON_VALUE)
+  @Operation(summary = "Updates rating of Photographer")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(responseCode = "500", description = "Server failure")
+      })
+  public Rating updateRating(
+      @Parameter(description = "Rating data", required = true) @RequestBody @Validated
+          UpdateRatingForm updateRatingForm,
+      @Parameter(
+              description = "Id of Photographer",
+              required = true,
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0")
+          @PathVariable("photographer_id")
+          String photographerId,
+      @Parameter(
+              description = "Id of Photographer's Rating",
+              required = true,
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0")
+          @PathVariable("rating_id")
+          String ratingId) {
+
+    return service.updateRate(photographerId, ratingId, updateRatingForm);
   }
 }

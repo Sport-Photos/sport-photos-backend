@@ -1,7 +1,7 @@
 package com.sportphotos.domain.model
 
 import com.github.javafaker.Faker
-import com.sportphotos.domain.events.model.Photographer
+import com.sportphotos.domain.photographers.model.Photographer
 
 import static com.sportphotos.domain.model.RatingMock.randomRating
 

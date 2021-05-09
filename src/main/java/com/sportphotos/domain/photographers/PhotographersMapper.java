@@ -1,6 +1,6 @@
-package com.sportphotos.interfaces.rest.photographers;
+package com.sportphotos.domain.photographers;
 
-import com.sportphotos.domain.events.model.Rating;
+import com.sportphotos.domain.photographers.model.Rating;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 

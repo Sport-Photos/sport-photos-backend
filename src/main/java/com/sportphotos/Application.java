@@ -1,6 +1,6 @@
 package com.sportphotos;
 
-import com.sportphotos.domain.events.DomainConfig;
+import com.sportphotos.domain.DomainConfig;
 import com.sportphotos.infrastructure.InfrastructureConfig;
 import com.sportphotos.interfaces.rest.RestConfig;
 import org.springframework.boot.SpringApplication;

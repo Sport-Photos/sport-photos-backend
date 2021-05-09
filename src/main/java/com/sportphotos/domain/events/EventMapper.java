@@ -1,9 +1,10 @@
-package com.sportphotos.interfaces.rest.events;
+package com.sportphotos.domain.events;
 
 import com.sportphotos.domain.events.model.Event;
 import com.sportphotos.domain.events.model.Location;
 import com.sportphotos.domain.events.model.PhotoCoverage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 import lombok.SneakyThrows;
 import org.bson.BsonBinarySubType;
@@ -16,13 +17,14 @@ public class EventMapper {
 
   /** https://www.baeldung.com/spring-boot-mongodb-upload-file */
   @SneakyThrows(IOException.class)
-  Event map(EventAddForm form, MultipartFile avatar) {
+  Event map(AddEventForm form, MultipartFile avatar) {
     return Event.builder()
         .id(UUID.randomUUID().toString())
         .date(form.getDate())
         .name(form.getName())
         .location(new Location(form.getCity(), form.getCountry()))
         .avatar(new Binary(BsonBinarySubType.BINARY, avatar.getBytes()))
+        .photoCoverages(new ArrayList<>())
         .build();
   }
 

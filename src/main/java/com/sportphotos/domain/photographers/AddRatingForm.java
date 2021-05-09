@@ -1,10 +1,16 @@
-package com.sportphotos.interfaces.rest.photographers;
+package com.sportphotos.domain.photographers;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotNull;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Value
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class AddRatingForm {
 
   @Schema(example = "3")

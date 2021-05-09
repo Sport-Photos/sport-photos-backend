@@ -2,8 +2,8 @@ package com.sportphotos.domain
 
 import com.sportphotos.domain.events.EventsService
 import com.sportphotos.domain.events.InMemoryEventsRepository
-import com.sportphotos.domain.events.InMemoryPhotographersRepository
-import com.sportphotos.domain.events.PhotographersService
+import com.sportphotos.domain.photographers.InMemoryPhotographersRepository
+import com.sportphotos.domain.photographers.PhotographersService
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 

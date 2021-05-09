@@ -1,13 +1,19 @@
-package com.sportphotos.interfaces.rest.events;
+package com.sportphotos.domain.events;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Value
-public class EventAddForm {
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+public class AddEventForm {
 
   @Schema(example = "2017-04-12")
   @NotNull

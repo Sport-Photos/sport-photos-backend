@@ -1,4 +1,4 @@
-package com.sportphotos.domain.events;
+package com.sportphotos.domain;
 
 public class ResourceNotFoundException extends RuntimeException {
 

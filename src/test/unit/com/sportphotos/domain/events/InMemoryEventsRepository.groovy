@@ -11,7 +11,7 @@ class InMemoryEventsRepository implements EventsRepository, Clearable {
 
     @Override
     List<Event> findAll() {
-        data.values()
+        new ArrayList<>(data.values())
     }
 
     @Override

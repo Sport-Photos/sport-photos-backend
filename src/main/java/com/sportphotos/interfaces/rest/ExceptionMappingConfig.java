@@ -1,6 +1,6 @@
 package com.sportphotos.interfaces.rest;
 
-import com.sportphotos.domain.events.ResourceNotFoundException;
+import com.sportphotos.domain.ResourceNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

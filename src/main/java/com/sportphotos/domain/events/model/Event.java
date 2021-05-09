@@ -24,14 +24,10 @@ public class Event {
   @Indexed private LocalDate date;
   private String name;
   private Location location;
-  private List<PhotoCoverage> photoCoverages;
+  private List<PhotoCoverage> photoCoverages = new ArrayList<>();
   private Binary avatar;
 
   public void addPhotoCoverage(PhotoCoverage photoCoverage) {
-    if (photoCoverages == null) {
-      photoCoverages = new ArrayList<>();
-    }
-
     photoCoverages.add(photoCoverage);
   }
 }

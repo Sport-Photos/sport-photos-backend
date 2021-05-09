@@ -1,10 +1,18 @@
-package com.sportphotos.interfaces.rest.events;
+package com.sportphotos.domain.events;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Value
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class AddCoverageForm {
   @Schema(example = "Vader")
   @NotBlank
