@@ -3,8 +3,11 @@ package com.sportphotos.interfaces.rest.events;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
+import com.sportphotos.domain.events.AddCoverageForm;
+import com.sportphotos.domain.events.AddEventForm;
 import com.sportphotos.domain.events.EventsRepository;
 import com.sportphotos.domain.events.EventsService;
+import com.sportphotos.domain.events.UpdatePhotoCoverageForm;
 import com.sportphotos.domain.events.model.Event;
 import com.sportphotos.domain.events.model.PhotoCoverage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +21,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +42,6 @@ public class EventsController {
 
   private final EventsRepository repository;
   private final EventsService service;
-  private final EventMapper mapper;
 
   @GetMapping(produces = APPLICATION_JSON_VALUE)
   @Operation(summary = "Returns all events")
@@ -86,12 +90,12 @@ public class EventsController {
               schema = @Schema(type = "string", format = "binary"))
           @RequestPart("event_data")
           @Validated
-          EventAddForm eventAddForm,
+          AddEventForm addEventForm,
       @Parameter(description = "Avatar", required = true) @RequestPart("avatar")
           MultipartFile avatar,
       UriComponentsBuilder b) {
 
-    Event saved = service.save(mapper.map(eventAddForm, avatar));
+    Event saved = service.save(addEventForm, avatar);
 
     UriComponents uriComponents = b.path("/api/events/{event_id}").buildAndExpand(saved.getId());
 
@@ -103,7 +107,7 @@ public class EventsController {
    * https://github.com/springdoc/springdoc-openapi/issues/820#issuecomment-672875450
    */
   @PostMapping(
-      value = "/{event_id}/photo_coverage",
+      value = "/{event_id}/photo_coverages",
       produces = APPLICATION_JSON_VALUE,
       consumes = MULTIPART_FORM_DATA_VALUE)
   @Operation(summary = "Adds new Photo Coverage")
@@ -120,19 +124,68 @@ public class EventsController {
           @RequestPart("coverage_data")
           @Validated
           AddCoverageForm addCoverageForm,
-      @Parameter(description = "Avatar", required = true) @RequestPart("best_photo")
+      @Parameter(description = "Best photo", required = true) @RequestPart("best_photo")
           MultipartFile bestPhoto,
       @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
           String eventId,
       UriComponentsBuilder b) {
 
     PhotoCoverage saved =
-        service.save(eventId, addCoverageForm.getNick(), mapper.map(addCoverageForm, bestPhoto));
+        service.save(eventId, addCoverageForm.getNick(), addCoverageForm, bestPhoto);
 
     UriComponents uriComponents =
-        b.path("/api/events/{event_id}/photo_coverage/{photo_coverage_id}")
+        b.path("/api/events/{event_id}/photo_coverages/{photo_coverage_id}")
             .buildAndExpand(eventId, saved.getId());
 
     return ResponseEntity.created(uriComponents.toUri()).body(saved);
+  }
+
+  @PatchMapping(
+      value = "/{event_id}/photo_coverages/{photo_coverage_id}",
+      produces = APPLICATION_JSON_VALUE,
+      consumes = MULTIPART_FORM_DATA_VALUE)
+  @Operation(summary = "Updates Photo Coverage for Event")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(responseCode = "500", description = "Server failure")
+      })
+  public PhotoCoverage updatePhotoCoverage(
+      @Parameter(
+              description = "Coverage date",
+              required = true,
+              schema = @Schema(type = "string", format = "binary"))
+          @RequestPart("coverage_data")
+          @Validated
+          UpdatePhotoCoverageForm updatePhotoCoverageForm,
+      @Parameter(description = "Best photo", required = true) @RequestPart("best_photo")
+          MultipartFile bestPhoto,
+      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+          String eventId,
+      @Parameter(description = "Photo Coverage Id", required = true)
+          @PathVariable("photo_coverage_id")
+          String photoCoverageId) {
+
+    return service.updatePhotoCoverage(
+        eventId, photoCoverageId, updatePhotoCoverageForm, bestPhoto);
+  }
+
+  @DeleteMapping(value = "/{event_id}/photo_coverages/{photo_coverage_id}")
+  @Operation(summary = "Deletes Photo Coverage frm Event")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "No Content"),
+        @ApiResponse(responseCode = "500", description = "Server failure")
+      })
+  public ResponseEntity<Void> deletePhotoCoverage(
+      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+          String eventId,
+      @Parameter(description = "Photo Coverage Id", required = true)
+          @PathVariable("photo_coverage_id")
+          String photoCoverageId) {
+
+    service.deletePhotoCoverage(eventId, photoCoverageId);
+
+    return ResponseEntity.noContent().build();
   }
 }

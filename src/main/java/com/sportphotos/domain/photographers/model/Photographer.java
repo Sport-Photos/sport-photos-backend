@@ -1,4 +1,4 @@
-package com.sportphotos.domain.events.model;
+package com.sportphotos.domain.photographers.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +20,9 @@ public class Photographer {
   @Id private String id;
 
   @Indexed private String nickname;
-  private List<Rating> ratings;
+  private List<Rating> ratings = new ArrayList<>();
 
   public void addRating(Rating rating) {
-    if (ratings == null) {
-      ratings = new ArrayList<>();
-    }
-
     ratings.add(rating);
   }
 }

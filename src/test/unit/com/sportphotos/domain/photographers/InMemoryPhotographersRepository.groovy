@@ -1,7 +1,7 @@
-package com.sportphotos.domain.events
+package com.sportphotos.domain.photographers
 
 import com.sportphotos.domain.Clearable
-import com.sportphotos.domain.events.model.Photographer
+import com.sportphotos.domain.photographers.model.Photographer
 
 import java.util.concurrent.ConcurrentHashMap
 

@@ -1,6 +1,5 @@
 package com.sportphotos.domain
 
-import com.sportphotos.domain.events.DomainConfig
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.test.context.ContextConfiguration
 
