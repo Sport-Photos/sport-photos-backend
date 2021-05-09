@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 
 @MongoTest
-class MongoDbIT extends Specification {
+class MongoDbTestIT extends Specification {
 
     @Autowired
     MongoClient mongoClient

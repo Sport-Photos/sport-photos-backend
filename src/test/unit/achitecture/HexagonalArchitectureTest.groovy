@@ -6,7 +6,7 @@ import com.tngtech.archunit.core.importer.ImportOption
 import com.tngtech.archunit.library.Architectures
 import spock.lang.Specification
 
-class HexagonalArchitectureSpec extends Specification {
+class HexagonalArchitectureTest extends Specification {
 
     static final JavaClasses classes = new ClassFileImporter()
         .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)

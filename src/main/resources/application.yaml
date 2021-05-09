@@ -1,10 +1,12 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
 server:
   port: 8080
 
 management:
   server:
     port: 9999
-
-spring:
-  jackson:
-    property-naming-strategy: SNAKE_CASE

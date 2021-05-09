@@ -1,5 +1,6 @@
 package com.sportphotos;
 
+import com.sportphotos.domain.events.DomainConfig;
 import com.sportphotos.infrastructure.InfrastructureConfig;
 import com.sportphotos.interfaces.rest.RestConfig;
 import org.springframework.boot.SpringApplication;
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
-@Import({RestConfig.class, InfrastructureConfig.class})
+@Import({DomainConfig.class, RestConfig.class, InfrastructureConfig.class})
 public class Application {
 
   public static void main(String[] args) {
