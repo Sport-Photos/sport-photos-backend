@@ -38,11 +38,14 @@ class EventsServiceTest extends BaseDomainTest {
             def addEventForm = randomAddEventForm()
             def avatar = mockMultipartFile()
         when:
-            eventService.save(addEventForm, avatar)
+            def event = eventService.save(addEventForm, avatar)
         then:
-            List<Event> events = eventsRepository.findAll()
-            events.size() == 1
-            events.find { it.name == addEventForm.name && it.date == addEventForm.date && it.avatar != null }
+            def saved = eventsRepository.findById(event.id).get()
+            saved.name == addEventForm.name
+            saved.date == addEventForm.date
+            saved.avatar != null
+        and:
+            eventsIndexProvider.findById(event.id).isPresent()
     }
 
     def 'getAllPhotoCoverages should return all Photo Coverages for Event'() {

@@ -19,6 +19,7 @@ public class EventsService {
   private final EventsRepository eventsRepository;
   private final EventMapper eventMapper;
   private final PhotographersRepository photographersRepository;
+  private final EventsIndexProvider eventsIndexProvider;
 
   public Event findById(String eventId) {
     checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
@@ -35,6 +36,7 @@ public class EventsService {
     checkArgument(avatar != null, "avatar is null");
 
     Event event = eventMapper.map(addEventForm, avatar);
+    eventsIndexProvider.addToIndex(event);
 
     return eventsRepository.save(event);
   }
