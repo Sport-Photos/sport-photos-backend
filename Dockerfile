@@ -1,6 +1,7 @@
 FROM adoptopenjdk:11.0.10_9-jdk-hotspot AS gradle-build
 WORKDIR /buildtmp
 COPY . ./
+RUN chmod 777 gradlew
 RUN ./gradlew clean spotlessApply build -x test --info --stacktrace
 
 FROM openjdk:11.0.10-jre-slim
