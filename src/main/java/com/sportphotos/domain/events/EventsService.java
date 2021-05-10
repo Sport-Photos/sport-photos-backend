@@ -8,6 +8,7 @@ import com.sportphotos.domain.events.model.Event;
 import com.sportphotos.domain.events.model.PhotoCoverage;
 import com.sportphotos.domain.photographers.PhotographersRepository;
 import com.sportphotos.domain.photographers.model.Photographer;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +54,23 @@ public class EventsService {
     eventsRepository.save(event);
 
     return photoCoverage;
+  }
+
+  public List<PhotoCoverage> getAllPhotoCoverages(String eventId) {
+    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
+
+    Event event = findById(eventId);
+
+    return event.getPhotoCoverages();
+  }
+
+  public PhotoCoverage getPhotoCoverage(String eventId, String photoCoverageId) {
+    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
+    checkArgument(!Strings.isNullOrEmpty(photoCoverageId), "photoCoverageId is null or empty");
+
+    Event event = findById(eventId);
+
+    return findPhotoCoverageById(event, photoCoverageId);
   }
 
   public void deletePhotoCoverage(String eventId, String photoCoverageId) {

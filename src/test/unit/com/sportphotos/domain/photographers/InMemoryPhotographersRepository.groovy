@@ -10,6 +10,11 @@ class InMemoryPhotographersRepository implements PhotographersRepository, Cleara
     final Map<String, Photographer> data = new ConcurrentHashMap<>()
 
     @Override
+    List<Photographer> findAll() {
+        new ArrayList<>(data.values())
+    }
+
+    @Override
     Optional<Photographer> findById(String id) {
         Optional.ofNullable(data.values().find { it.id == id })
     }

@@ -18,6 +18,38 @@ class PhotographersServiceTest extends BaseDomainTest {
             thrown(ResourceNotFoundException)
     }
 
+    def 'getRatings should get all Ratings for Photographer'() {
+        given:
+            def photographer = randomPhotographer()
+            photographersRepository.save(photographer)
+        when:
+            def ratings = photographersService.getAllRatings(photographer.id)
+        then:
+            ratings.size() == 2
+            ratings.find {
+                it.id == photographer.ratings[0].id
+                it.rate == photographer.ratings[0].rate
+                it.comment == photographer.ratings[0].comment
+            }
+            ratings.find {
+                it.id == photographer.ratings[1].id
+                it.rate == photographer.ratings[1].rate
+                it.comment == photographer.ratings[1].comment
+            }
+    }
+
+    def 'getRating should get Rating for Photographer'() {
+        given:
+            def photographer = randomPhotographer()
+            photographersRepository.save(photographer)
+        when:
+            def rating = photographersService.getRating(photographer.id, photographer.ratings[0].id)
+        then:
+            rating.id == photographer.ratings[0].id
+            rating.rate == photographer.ratings[0].rate
+            rating.comment == photographer.ratings[0].comment
+    }
+
     def 'rate should add Rating to Photographer'() {
         given:
             def addRatingForm = randomAddRatingForm()
@@ -54,4 +86,5 @@ class PhotographersServiceTest extends BaseDomainTest {
                 }
             }
     }
+
 }
