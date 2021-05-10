@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import com.sportphotos.domain.ResourceNotFoundException;
 import com.sportphotos.domain.photographers.model.Photographer;
 import com.sportphotos.domain.photographers.model.Rating;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -13,6 +14,23 @@ public class PhotographersService {
 
   private final PhotographersRepository photographersRepository;
   private final PhotographersMapper photographersMapper;
+
+  public List<Rating> getAllRatings(String photographerId) {
+    checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");
+
+    Photographer photographer = findById(photographerId);
+
+    return photographer.getRatings();
+  }
+
+  public Rating getRating(String photographerId, String ratingId) {
+    checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");
+    checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
+
+    Photographer photographer = findById(photographerId);
+
+    return findRatingById(photographer, ratingId);
+  }
 
   public Rating rate(String photographerId, AddRatingForm addRatingForm) {
     checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");

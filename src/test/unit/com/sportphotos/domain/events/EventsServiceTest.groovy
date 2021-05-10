@@ -45,6 +45,38 @@ class EventsServiceTest extends BaseDomainTest {
             events.find { it.name == addEventForm.name && it.date == addEventForm.date && it.avatar != null }
     }
 
+    def 'getAllPhotoCoverages should return all Photo Coverages for Event'() {
+        given: 'create event'
+            def event = randomEvent()
+            eventsRepository.save(event)
+        when:
+            def photoCoverages = eventService.getAllPhotoCoverages(event.id)
+        then:
+            photoCoverages.size() == 2
+            photoCoverages.find {
+                it.photographer.nickname == event.photoCoverages[0].photographer.nickname &&
+                    it.description == event.photoCoverages[0].description &&
+                    it.link == event.photoCoverages[0].link
+            }
+            photoCoverages.find {
+                it.photographer.nickname == event.photoCoverages[1].photographer.nickname &&
+                    it.description == event.photoCoverages[1].description &&
+                    it.link == event.photoCoverages[1].link
+            }
+    }
+
+    def 'getPhotoCoverage should return Photo Coverage for Event'() {
+        given: 'create event'
+            def event = randomEvent()
+            eventsRepository.save(event)
+        when:
+            def photoCoverage = eventService.getPhotoCoverage(event.id, event.photoCoverages[0].id)
+        then:
+            photoCoverage.photographer.nickname == event.photoCoverages[0].photographer.nickname
+            photoCoverage.description == event.photoCoverages[0].description
+            photoCoverage.link == event.photoCoverages[0].link
+    }
+
     def 'save(PhotoCoverage) should store PhotoCoverage in database'() {
         given: 'create event'
             def addEventForm = randomAddEventForm()
@@ -113,4 +145,5 @@ class EventsServiceTest extends BaseDomainTest {
         stub.getBytes() >> new byte[1]
         stub
     }
+
 }

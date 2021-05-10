@@ -102,6 +102,39 @@ public class EventsController {
     return ResponseEntity.created(uriComponents.toUri()).body(saved);
   }
 
+  @GetMapping(value = "/{event_id}/photo_coverages", produces = APPLICATION_JSON_VALUE)
+  @Operation(summary = "Get all Photo Coverages for Event")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(responseCode = "500", description = "Server failure")
+      })
+  public List<PhotoCoverage> getPhotoCoverages(
+      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+          String eventId) {
+
+    return service.getAllPhotoCoverages(eventId);
+  }
+
+  @GetMapping(
+      value = "/{event_id}/photo_coverages/{photo_coverage_id}",
+      produces = APPLICATION_JSON_VALUE)
+  @Operation(summary = "Get Photo Coverage for Event")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(responseCode = "500", description = "Server failure")
+      })
+  public PhotoCoverage getPhotoCoverage(
+      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+          String eventId,
+      @Parameter(description = "Photo Coverage Id", required = true)
+          @PathVariable("photo_coverage_id")
+          String photoCoverageId) {
+
+    return service.getPhotoCoverage(eventId, photoCoverageId);
+  }
+
   /**
    * Multipart issue explained in
    * https://github.com/springdoc/springdoc-openapi/issues/820#issuecomment-672875450

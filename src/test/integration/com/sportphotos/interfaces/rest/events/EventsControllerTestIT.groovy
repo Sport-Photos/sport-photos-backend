@@ -13,7 +13,6 @@ import spock.lang.Specification
 
 import static com.sportphotos.domain.model.EventMock.randomEvent
 import static com.sportphotos.domain.model.PhotoCoverageMock.randomPhotoCoverage
-import static com.sportphotos.domain.model.UpdatePhotoCoverageFormMock.randomUpdatePhotoCoverageForm
 import static io.restassured.RestAssured.given
 import static org.hamcrest.CoreMatchers.equalTo
 import static org.hamcrest.CoreMatchers.notNullValue
@@ -88,6 +87,37 @@ class EventsControllerTestIT extends Specification {
                 .body('photo_coverages', empty())
     }
 
+    def 'GET /api/events/{event_id}/photo_coverage should get all photo coverages for event'() {
+        given:
+            def event = randomEvent()
+
+            eventServiceMock.getAllPhotoCoverages(event.id) >> event.getPhotoCoverages()
+        expect:
+            given()
+                .get(photoCoveragePath(event.id))
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body('[0].id', equalTo(event.photoCoverages[0].id))
+                .body('[1].id', equalTo(event.photoCoverages[1].id))
+    }
+
+    def 'GET /api/events/{event_id}/photo_coverage/{photo_coverage_id} should get photo coverages by given id, for event'() {
+        given:
+            def event = randomEvent()
+
+            eventServiceMock.getPhotoCoverage(event.id, event.photoCoverages[0].id) >> event.photoCoverages[0]
+        expect:
+            given()
+                .get(photoCoveragePath(event.id, event.photoCoverages[0].id))
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body('id', equalTo(event.photoCoverages[0].id))
+                .body('photographer.nickname', equalTo(event.photoCoverages[0].photographer.nickname))
+                .body('description', equalTo(event.photoCoverages[0].description))
+                .body('link', equalTo(event.photoCoverages[0].link))
+                .body('best_photo', notNullValue())
+    }
+
     def 'POST /api/events/{event_id}/photo_coverage should add new photo coverage to event'() {
         given: 'Some event, which suppose to be stored in database'
             def event = randomEvent(photoCoverages: [])
@@ -113,7 +143,6 @@ class EventsControllerTestIT extends Specification {
         given: 'Some event, which suppose to be stored in database'
             def event = randomEvent(photoCoverages: [])
             def photoCoverage = randomPhotoCoverage()
-            def updatePhotoCoverageForm = randomUpdatePhotoCoverageForm()
             eventServiceMock.updatePhotoCoverage(*_) >> photoCoverage
         expect: 'Photo coverage is updated in database'
             given()
@@ -151,10 +180,10 @@ class EventsControllerTestIT extends Specification {
     }
 
     def photoCoveragePath(String eventId) {
-        "http://localhost:$port/api/events/$eventId/photo_coverages"
+        "${path(eventId)}/photo_coverages"
     }
 
     def photoCoveragePath(String eventId, String photoCoverageId) {
-        "http://localhost:$port/api/events/$eventId/photo_coverages/$photoCoverageId"
+        "${photoCoveragePath(eventId)}/$photoCoverageId"
     }
 }
