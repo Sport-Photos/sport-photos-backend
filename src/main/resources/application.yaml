@@ -10,3 +10,6 @@ server:
 management:
   server:
     port: 9999
+
+algolia:
+  index_name: sport_photos_events

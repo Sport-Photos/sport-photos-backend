@@ -59,6 +59,7 @@ dependencies {
     implementation "com.google.guava:guava:$guavaVersion"
     implementation "com.algolia:algoliasearch-core:$algoliaVersion"
     implementation "com.algolia:algoliasearch-java-net:$algoliaVersion"
+    implementation "com.github.javafaker:javafaker:$javaFakerVersion"
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -72,7 +73,6 @@ dependencies {
     testImplementation "io.rest-assured:rest-assured:$restAssuredVersion"
     testImplementation "io.rest-assured:rest-assured-all:$restAssuredVersion"
     testImplementation "com.athaydes:spock-reports:$spockReportsVersion"
-    testImplementation "com.github.javafaker:javafaker:$javaFakerVersion"
 }
 
 sonarqube {
