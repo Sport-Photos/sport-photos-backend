@@ -22,6 +22,8 @@ import org.bson.types.Binary;
 public final class Fakes {
 
   private static final Faker faker = new Faker();
+  private static int nicknameCounter = 10000;
+  private static int eventNameCounter = 10000;
 
   static Event fakeEvent(Supplier<List<PhotoCoverage>> photoCoverages) {
     return Event.builder()
@@ -33,7 +35,7 @@ public final class Fakes {
                 .toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate())
-        .name(faker.lordOfTheRings().location())
+        .name(faker.lordOfTheRings().location() + " - " + eventNameCounter++)
         .photoCoverages(photoCoverages.get())
         .avatar(new Binary(BsonBinarySubType.BINARY, faker.avatar().image().getBytes()))
         .location(new Location(faker.starTrek().location(), faker.country().name()))
@@ -64,7 +66,7 @@ public final class Fakes {
   static Photographer fakePhotographer(Supplier<List<Rating>> ratings) {
     return Photographer.builder()
         .id(UUID.randomUUID().toString())
-        .nickname(faker.witcher().character())
+        .nickname(faker.gameOfThrones().character() + " - " + nicknameCounter++)
         .ratings(ratings.get())
         .build();
   }
