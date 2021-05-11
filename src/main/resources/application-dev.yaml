@@ -4,5 +4,4 @@ spring:
       uri: mongodb://localhost:27017/test
 
 algolia:
-  index_name: sport_photos_events
-
+  index_name: sport_photos_events_dev
