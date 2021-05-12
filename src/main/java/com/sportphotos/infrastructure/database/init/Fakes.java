@@ -1,5 +1,7 @@
 package com.sportphotos.infrastructure.database.init;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.github.javafaker.Faker;
 import com.sportphotos.domain.events.model.Event;
 import com.sportphotos.domain.events.model.Location;
@@ -55,10 +57,18 @@ public final class Fakes {
   }
 
   static List<Event> fakeEvents(
-      int count, int photoCoveragesCount, List<Photographer> photographers) {
+      int from,
+      int to,
+      int photoCoveragesFrom,
+      int photoCoveragesTo,
+      List<Photographer> photographers) {
 
     return fakeCollection(
-        count, () -> fakeEvent(() -> fakePhotoCoverages(photoCoveragesCount, photographers)));
+        from,
+        to,
+        () ->
+            fakeEvent(
+                () -> fakePhotoCoverages(photoCoveragesFrom, photoCoveragesTo, photographers)));
   }
 
   static PhotoCoverage fakePhotoCoverage(Photographer photographer) {
@@ -76,8 +86,9 @@ public final class Fakes {
     return photoCoverage;
   }
 
-  static List<PhotoCoverage> fakePhotoCoverages(int count, List<Photographer> photographers) {
-    return fakeCollection(count, () -> fakePhotoCoverage(choose(photographers)));
+  static List<PhotoCoverage> fakePhotoCoverages(
+      int from, int to, List<Photographer> photographers) {
+    return fakeCollection(from, to, () -> fakePhotoCoverage(choose(photographers)));
   }
 
   static Photographer fakePhotographer(Supplier<List<Rating>> ratings) {
@@ -93,8 +104,9 @@ public final class Fakes {
     return photographer;
   }
 
-  static List<Photographer> fakePhotographers(int count, int ratingsCount) {
-    return fakeCollection(count, () -> fakePhotographer(() -> fakeRatings(ratingsCount)));
+  static List<Photographer> fakePhotographers(int from, int to, int ratingsFrom, int ratingsTo) {
+    return fakeCollection(
+        from, to, () -> fakePhotographer(() -> fakeRatings(ratingsFrom, ratingsTo)));
   }
 
   static Rating fakeRating() {
@@ -110,12 +122,14 @@ public final class Fakes {
     return rating;
   }
 
-  static List<Rating> fakeRatings(int count) {
-    return fakeCollection(count, Fakes::fakeRating);
+  static List<Rating> fakeRatings(int from, int to) {
+    return fakeCollection(from, to, Fakes::fakeRating);
   }
 
-  static <T> List<T> fakeCollection(int count, Supplier<T> supplier) {
-    return IntStream.range(1, randomIntIncluding(count))
+  static <T> List<T> fakeCollection(int from, int to, Supplier<T> supplier) {
+    checkArgument(from <= to, "range from is greater than range to");
+
+    return IntStream.range(0, from + randomInt(to - from + 1))
         .mapToObj(ignored -> supplier.get())
         .collect(Collectors.toList());
   }
@@ -138,15 +152,11 @@ public final class Fakes {
         client.send(request, HttpResponse.BodyHandlers.ofInputStream()).body().readAllBytes());
   }
 
-  private static int randomIntIncluding(int num) {
-    return randomIntExcluding(num) + 1;
-  }
-
-  private static int randomIntExcluding(int num) {
+  private static int randomInt(int num) {
     return (int) (Math.random() * num);
   }
 
   private static <T> T choose(List<T> objects) {
-    return objects.get(randomIntExcluding(objects.size()));
+    return objects.get(randomInt(objects.size()));
   }
 }

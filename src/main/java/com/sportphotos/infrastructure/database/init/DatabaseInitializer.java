@@ -22,8 +22,8 @@ public class DatabaseInitializer {
   @EventListener(ApplicationStartedEvent.class)
   public void onApplicationEvent(ApplicationStartedEvent event) {
     if (!isInitiated()) {
-      List<Photographer> photographers = Fakes.fakePhotographers(50, 10);
-      List<Event> events = Fakes.fakeEvents(100, 6, photographers);
+      List<Photographer> photographers = Fakes.fakePhotographers(20, 50, 4, 8);
+      List<Event> events = Fakes.fakeEvents(30, 70, 2, 6, photographers);
 
       mongoTemplate.insertAll(photographers);
       mongoTemplate.insertAll(events);
