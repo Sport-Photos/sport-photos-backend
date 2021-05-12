@@ -48,7 +48,7 @@ class PhotographersControllerTestIT extends Specification {
         given:
             def photographer = randomPhotographer()
 
-            photographersServiceMock.findById(photographer.id) >> photographer
+            photographersServiceMock.getPhotographerById(photographer.id) >> photographer
         expect:
             given()
                 .get(photographersPath(photographer.id))
@@ -93,7 +93,7 @@ class PhotographersControllerTestIT extends Specification {
             def addRatingForm = randomAddRatingForm()
             def photographer = randomPhotographer()
             def rating = randomRating(rate: addRatingForm.rate, comment: addRatingForm.comment)
-            photographersServiceMock.rate(photographer.id, addRatingForm) >> rating
+            photographersServiceMock.addRating(photographer.id, addRatingForm) >> rating
             def request = """
                 {
                     "rate": $addRatingForm.rate,
@@ -118,7 +118,7 @@ class PhotographersControllerTestIT extends Specification {
             def updateRatingForm = randomUpdateRatingForm()
             def photographer = randomPhotographer()
             def rating = randomRating(rate: updateRatingForm.rate, comment: updateRatingForm.comment)
-            photographersServiceMock.updateRate(photographer.id, rating.id, updateRatingForm) >> rating
+            photographersServiceMock.updateRating(photographer.id, rating.id, updateRatingForm) >> rating
             def request = """
                 {
                     "rate": $updateRatingForm.rate,

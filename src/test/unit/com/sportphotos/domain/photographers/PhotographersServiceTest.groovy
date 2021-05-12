@@ -12,9 +12,9 @@ import static com.sportphotos.domain.model.UpdateRatingFormMock.randomUpdateRati
 @DomainTest
 class PhotographersServiceTest extends BaseDomainTest {
 
-    def 'findById should throw ResourceNotFoundException when Photographer not found by given id'() {
+    def 'getPhotographerById should throw ResourceNotFoundException when Photographer not found by given id'() {
         when:
-            photographersService.findById(UUID.randomUUID().toString())
+            photographersService.getPhotographerById(UUID.randomUUID().toString())
         then:
             thrown(ResourceNotFoundException)
     }
@@ -51,15 +51,15 @@ class PhotographersServiceTest extends BaseDomainTest {
             rating.comment == photographer.ratings[0].comment
     }
 
-    def 'rate should add Rating to Photographer'() {
+    def 'addRating should add Rating to Photographer'() {
         given:
             def addRatingForm = randomAddRatingForm()
             def photographer = randomPhotographer(ratings: [])
             photographersRepository.save(photographer)
         when:
-            photographersService.rate(photographer.id, addRatingForm)
+            photographersService.addRating(photographer.id, addRatingForm)
         then:
-            with(photographersService.findById(photographer.id)) {
+            with(photographersService.getPhotographerById(photographer.id)) {
                 it.ratings.size() == 1
                 it.ratings.find {
                     it.rate == addRatingForm.rate
@@ -68,18 +68,18 @@ class PhotographersServiceTest extends BaseDomainTest {
             }
     }
 
-    def 'updateRate should update Rating of Photographer'() {
+    def 'updateRating should update Rating of Photographer'() {
         given:
             def addRatingForm = randomAddRatingForm()
             def photographer = randomPhotographer(ratings: [])
             photographersRepository.save(photographer)
-            def rating = photographersService.rate(photographer.id, addRatingForm)
+            def rating = photographersService.addRating(photographer.id, addRatingForm)
         and:
             def updateRatingForm = randomUpdateRatingForm()
         when:
-            photographersService.updateRate(photographer.id, rating.id, updateRatingForm)
+            photographersService.updateRating(photographer.id, rating.id, updateRatingForm)
         then:
-            with(photographersService.findById(photographer.id)) {
+            with(photographersService.getPhotographerById(photographer.id)) {
                 it.ratings.size() == 1
                 it.ratings.find {
                     it.rate == updateRatingForm.rate
@@ -88,12 +88,12 @@ class PhotographersServiceTest extends BaseDomainTest {
             }
     }
 
-    def 'deleteRate should delete Rating from database'() {
+    def 'deleteRating should delete Rating from database'() {
         given: 'create event'
             def photographer = randomPhotographer(ratings: [randomRating()])
             photographersRepository.save(photographer)
         when:
-            photographersService.deleteRate(photographer.id, photographer.ratings[0].id)
+            photographersService.deleteRating(photographer.id, photographer.ratings[0].id)
         then:
             with(photographersRepository.findById(photographer.id).get()) {
                 it.ratings.isEmpty()
