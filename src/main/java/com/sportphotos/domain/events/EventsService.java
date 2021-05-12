@@ -43,8 +43,8 @@ public class EventsService {
 
   public void deleteEvent(String eventId) {
     checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
-
     eventsRepository.deleteById(eventId);
+    eventsIndexProvider.removeFromIndex(eventId);
   }
 
   public PhotoCoverage addPhotoCoverage(

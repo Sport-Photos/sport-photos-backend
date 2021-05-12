@@ -56,6 +56,7 @@ class EventsServiceTest extends BaseDomainTest {
             eventService.deleteEvent(event.id)
         then:
             !eventsRepository.findById(event.id).isPresent()
+            !eventsIndexProvider.findById(event.id).isPresent()
     }
 
     def 'getAllPhotoCoverages should return all Photo Coverages for Event'() {
