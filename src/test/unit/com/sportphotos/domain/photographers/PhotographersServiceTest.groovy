@@ -6,6 +6,7 @@ import com.sportphotos.domain.ResourceNotFoundException
 
 import static com.sportphotos.domain.model.AddRatingFormMock.randomAddRatingForm
 import static com.sportphotos.domain.model.PhotographerMock.randomPhotographer
+import static com.sportphotos.domain.model.RatingMock.randomRating
 import static com.sportphotos.domain.model.UpdateRatingFormMock.randomUpdateRatingForm
 
 @DomainTest
@@ -87,4 +88,15 @@ class PhotographersServiceTest extends BaseDomainTest {
             }
     }
 
+    def 'deleteRate should delete Rating from database'() {
+        given: 'create event'
+            def photographer = randomPhotographer(ratings: [randomRating()])
+            photographersRepository.save(photographer)
+        when:
+            photographersService.deleteRate(photographer.id, photographer.ratings[0].id)
+        then:
+            with(photographersRepository.findById(photographer.id).get()) {
+                it.ratings.isEmpty()
+            }
+    }
 }

@@ -68,7 +68,7 @@ class EventsControllerTestIT extends Specification {
     def 'POST /api/events should add event'() {
         given: 'Some event, which suppose to be stored in database'
             def event = randomEvent(photoCoverages: [])
-            eventServiceMock.save(_ as AddEventForm, _ as MultipartFile) >> event
+            eventServiceMock.addEvent(_ as AddEventForm, _ as MultipartFile) >> event
         expect: 'Event is saved in database and its body and location is returned'
             given()
                 .multiPart("event_data", new File('src/test/resources/event.json'), 'application/json')
@@ -85,6 +85,17 @@ class EventsControllerTestIT extends Specification {
                 .body('location.country', equalTo(event.location.country))
                 .body('avatar', notNullValue())
                 .body('photo_coverages', empty())
+    }
+
+    def 'DELETE /api/events/{event_id} should remove event'() {
+        given:
+            def eventId = UUID.randomUUID().toString()
+        expect:
+            given()
+                .when()
+                .delete(path(eventId))
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value())
     }
 
     def 'GET /api/events/{event_id}/photo_coverage should get all photo coverages for event'() {
@@ -122,7 +133,7 @@ class EventsControllerTestIT extends Specification {
         given: 'Some event, which suppose to be stored in database'
             def event = randomEvent(photoCoverages: [])
             def photoCoverage = randomPhotoCoverage()
-            eventServiceMock.save(*_) >> photoCoverage
+            eventServiceMock.addPhotoCoverage(*_) >> photoCoverage
         expect: 'Event is saved in database and its body and location is returned'
             given()
                 .multiPart("coverage_data", new File('src/test/resources/coverage.json'), 'application/json')

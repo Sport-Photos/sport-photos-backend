@@ -95,11 +95,27 @@ public class EventsController {
           MultipartFile avatar,
       UriComponentsBuilder b) {
 
-    Event saved = service.save(addEventForm, avatar);
+    Event saved = service.addEvent(addEventForm, avatar);
 
     UriComponents uriComponents = b.path("/api/events/{event_id}").buildAndExpand(saved.getId());
 
     return ResponseEntity.created(uriComponents.toUri()).body(saved);
+  }
+
+  @DeleteMapping(value = "/{event_id}")
+  @Operation(summary = "Deletes Event")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "No Content"),
+        @ApiResponse(responseCode = "500", description = "Server failure")
+      })
+  public ResponseEntity<Void> deleteEvent(
+      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+          String eventId) {
+
+    service.deleteEvent(eventId);
+
+    return ResponseEntity.noContent().build();
   }
 
   @GetMapping(value = "/{event_id}/photo_coverages", produces = APPLICATION_JSON_VALUE)
@@ -164,7 +180,7 @@ public class EventsController {
       UriComponentsBuilder b) {
 
     PhotoCoverage saved =
-        service.save(eventId, addCoverageForm.getNick(), addCoverageForm, bestPhoto);
+        service.addPhotoCoverage(eventId, addCoverageForm.getNick(), addCoverageForm, bestPhoto);
 
     UriComponents uriComponents =
         b.path("/api/events/{event_id}/photo_coverages/{photo_coverage_id}")
