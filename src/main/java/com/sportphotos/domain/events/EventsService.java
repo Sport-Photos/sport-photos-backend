@@ -31,7 +31,7 @@ public class EventsService {
                 new ResourceNotFoundException(String.format("Event - [%s] - not found.", eventId)));
   }
 
-  public Event save(AddEventForm addEventForm, MultipartFile avatar) {
+  public Event addEvent(AddEventForm addEventForm, MultipartFile avatar) {
     checkArgument(addEventForm != null, "addEventForm is null");
     checkArgument(avatar != null, "avatar is null");
 
@@ -41,7 +41,13 @@ public class EventsService {
     return eventsRepository.save(event);
   }
 
-  public PhotoCoverage save(
+  public void deleteEvent(String eventId) {
+    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
+
+    eventsRepository.deleteById(eventId);
+  }
+
+  public PhotoCoverage addPhotoCoverage(
       String eventId, String nickname, AddCoverageForm addCoverageForm, MultipartFile bestPhoto) {
     checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
     checkArgument(addCoverageForm != null, "addCoverageForm is null");

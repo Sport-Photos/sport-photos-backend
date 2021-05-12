@@ -26,6 +26,11 @@ class InMemoryEventsRepository implements EventsRepository, Clearable {
     }
 
     @Override
+    void deleteById(String id) {
+        data.remove(id)
+    }
+
+    @Override
     void clear() {
         data.clear()
     }

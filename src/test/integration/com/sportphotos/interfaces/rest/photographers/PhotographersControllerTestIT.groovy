@@ -137,6 +137,18 @@ class PhotographersControllerTestIT extends Specification {
                 .body('comment', equalTo(rating.comment))
     }
 
+    def 'DELETE /api/photographers/{photographer_id}/ratings/{rating_id} should remove rating from photographer'() {
+        given:
+            def photographerId = UUID.randomUUID().toString()
+            def ratingId = UUID.randomUUID().toString()
+        expect:
+            given()
+                .when()
+                .delete(ratingsPath(photographerId, ratingId))
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value())
+    }
+
     def photographersPath() {
         "http://localhost:$port/api/photographers"
     }

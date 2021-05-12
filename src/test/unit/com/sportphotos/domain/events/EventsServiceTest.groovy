@@ -38,7 +38,7 @@ class EventsServiceTest extends BaseDomainTest {
             def addEventForm = randomAddEventForm()
             def avatar = mockMultipartFile()
         when:
-            def event = eventService.save(addEventForm, avatar)
+            def event = eventService.addEvent(addEventForm, avatar)
         then:
             def saved = eventsRepository.findById(event.id).get()
             saved.name == addEventForm.name
@@ -46,6 +46,16 @@ class EventsServiceTest extends BaseDomainTest {
             saved.avatar != null
         and:
             eventsIndexProvider.findById(event.id).isPresent()
+    }
+
+    def 'deleteEvent should delete Event by given id'() {
+        given:
+            def event = randomEvent()
+            eventsRepository.save(event)
+        when:
+            eventService.deleteEvent(event.id)
+        then:
+            !eventsRepository.findById(event.id).isPresent()
     }
 
     def 'getAllPhotoCoverages should return all Photo Coverages for Event'() {
@@ -84,12 +94,12 @@ class EventsServiceTest extends BaseDomainTest {
         given: 'create event'
             def addEventForm = randomAddEventForm()
             def avatar = mockMultipartFile()
-            def event = eventService.save(addEventForm, avatar)
+            def event = eventService.addEvent(addEventForm, avatar)
         and: 'create photo coverage'
             def addCoverageForm = randomAddCoverageForm()
             def bestPhoto = mockMultipartFile()
         when:
-            eventService.save(event.id, addCoverageForm.nick, addCoverageForm, bestPhoto)
+            eventService.addPhotoCoverage(event.id, addCoverageForm.nick, addCoverageForm, bestPhoto)
         then:
             with(eventsRepository.findById(event.id).get()) {
                 it.photoCoverages.size() == 1
@@ -105,11 +115,11 @@ class EventsServiceTest extends BaseDomainTest {
         given: 'create event'
             def addEventForm = randomAddEventForm()
             def avatar = mockMultipartFile()
-            def event = eventService.save(addEventForm, avatar)
+            def event = eventService.addEvent(addEventForm, avatar)
         and: 'create photo coverage'
             def addCoverageForm = randomAddCoverageForm()
             def bestPhoto = mockMultipartFile()
-            def photoCoverage = eventService.save(event.id, addCoverageForm.nick, addCoverageForm, bestPhoto)
+            def photoCoverage = eventService.addPhotoCoverage(event.id, addCoverageForm.nick, addCoverageForm, bestPhoto)
         and: 'update photo coverage'
             def updatePhotoCoverageForm = randomUpdatePhotoCoverageForm()
         when:
@@ -129,12 +139,12 @@ class EventsServiceTest extends BaseDomainTest {
         given: 'create event'
             def addEventForm = randomAddEventForm()
             def avatar = mockMultipartFile()
-            def event = eventService.save(addEventForm, avatar)
+            def event = eventService.addEvent(addEventForm, avatar)
         and: 'create photo coverage'
             def addCoverageForm = randomAddCoverageForm()
             def bestPhoto = mockMultipartFile()
         and:
-            def photoCoverage = eventService.save(event.id, addCoverageForm.nick, addCoverageForm, bestPhoto)
+            def photoCoverage = eventService.addPhotoCoverage(event.id, addCoverageForm.nick, addCoverageForm, bestPhoto)
         when:
             eventService.deletePhotoCoverage(event.id, photoCoverage.id)
         then:

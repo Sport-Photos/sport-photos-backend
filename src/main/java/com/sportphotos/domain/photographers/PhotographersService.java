@@ -69,6 +69,16 @@ public class PhotographersService {
     return rating;
   }
 
+  public void deleteRate(String photographerId, String ratingId) {
+    checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");
+    checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
+
+    Photographer photographer = findById(photographerId);
+    photographer.getRatings().removeIf(rating -> ratingId.equals(rating.getId()));
+
+    photographersRepository.save(photographer);
+  }
+
   private Rating findRatingById(Photographer photographer, String ratingId) {
     checkArgument(photographer != null, "photographer is null");
     checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
