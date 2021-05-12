@@ -35,6 +35,7 @@ public class AlgoliaSearchClient implements EventsIndexProvider {
   public void removeFromIndex(String eventId) {
     SearchIndex<EventsIndex> eventsIndex = client.initIndex(eventsIndexName, EventsIndex.class);
     eventsIndex.deleteObject(eventId);
+    log.info("Search index deleted for event - [{}]", eventId);
   }
 
   @lombok.Value

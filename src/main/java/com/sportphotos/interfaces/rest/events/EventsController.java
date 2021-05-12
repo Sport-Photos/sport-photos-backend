@@ -110,7 +110,11 @@ public class EventsController {
         @ApiResponse(responseCode = "500", description = "Server failure")
       })
   public ResponseEntity<Void> deleteEvent(
-      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+      @Parameter(
+              description = "Event Id",
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0",
+              required = true)
+          @PathVariable("event_id")
           String eventId) {
 
     service.deleteEvent(eventId);
@@ -126,7 +130,11 @@ public class EventsController {
         @ApiResponse(responseCode = "500", description = "Server failure")
       })
   public List<PhotoCoverage> getPhotoCoverages(
-      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+      @Parameter(
+              description = "Event Id",
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0",
+              required = true)
+          @PathVariable("event_id")
           String eventId) {
 
     return service.getAllPhotoCoverages(eventId);
@@ -142,9 +150,16 @@ public class EventsController {
         @ApiResponse(responseCode = "500", description = "Server failure")
       })
   public PhotoCoverage getPhotoCoverage(
-      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+      @Parameter(
+              description = "Event Id",
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0",
+              required = true)
+          @PathVariable("event_id")
           String eventId,
-      @Parameter(description = "Photo Coverage Id", required = true)
+      @Parameter(
+              description = "Photo Coverage Id",
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0",
+              required = true)
           @PathVariable("photo_coverage_id")
           String photoCoverageId) {
 
@@ -175,7 +190,11 @@ public class EventsController {
           AddCoverageForm addCoverageForm,
       @Parameter(description = "Best photo", required = true) @RequestPart("best_photo")
           MultipartFile bestPhoto,
-      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+      @Parameter(
+              description = "Event Id",
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0",
+              required = true)
+          @PathVariable("event_id")
           String eventId,
       UriComponentsBuilder b) {
 
@@ -209,9 +228,16 @@ public class EventsController {
           UpdatePhotoCoverageForm updatePhotoCoverageForm,
       @Parameter(description = "Best photo", required = true) @RequestPart("best_photo")
           MultipartFile bestPhoto,
-      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+      @Parameter(
+              description = "Event Id",
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0",
+              required = true)
+          @PathVariable("event_id")
           String eventId,
-      @Parameter(description = "Photo Coverage Id", required = true)
+      @Parameter(
+              description = "Photo Coverage Id",
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0",
+              required = true)
           @PathVariable("photo_coverage_id")
           String photoCoverageId) {
 
@@ -227,9 +253,16 @@ public class EventsController {
         @ApiResponse(responseCode = "500", description = "Server failure")
       })
   public ResponseEntity<Void> deletePhotoCoverage(
-      @Parameter(description = "Event Id", required = true) @PathVariable("event_id")
+      @Parameter(
+              description = "Event Id",
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0",
+              required = true)
+          @PathVariable("event_id")
           String eventId,
-      @Parameter(description = "Photo Coverage Id", required = true)
+      @Parameter(
+              description = "Photo Coverage Id",
+              example = "a882076c-0cec-4427-948d-7a928fdf1ce0",
+              required = true)
           @PathVariable("photo_coverage_id")
           String photoCoverageId) {
 
