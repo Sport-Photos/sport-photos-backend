@@ -3,6 +3,7 @@ package com.sportphotos.domain.events;
 import com.sportphotos.domain.events.model.Event;
 import com.sportphotos.domain.events.model.Location;
 import com.sportphotos.domain.events.model.PhotoCoverage;
+import com.sportphotos.domain.photographers.model.Photographer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -29,12 +30,13 @@ public class EventMapper {
   }
 
   @SneakyThrows(IOException.class)
-  PhotoCoverage map(AddCoverageForm form, MultipartFile bestPhoto) {
+  PhotoCoverage map(AddCoverageForm form, MultipartFile bestPhoto, Photographer photographer) {
     return PhotoCoverage.builder()
         .id(UUID.randomUUID().toString())
         .description(form.getDescription())
         .link(form.getLink())
         .bestPhoto(new Binary(BsonBinarySubType.BINARY, bestPhoto.getBytes()))
+        .photographer(photographer)
         .build();
   }
 }

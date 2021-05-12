@@ -69,7 +69,7 @@ public class EventsController {
               example = "a882076c-0cec-4427-948d-7a928fdf1ce0")
           @PathVariable("event_id")
           String eventId) {
-    return service.findById(eventId);
+    return service.getEventById(eventId);
   }
 
   /**

@@ -66,7 +66,7 @@ public class PhotographersController {
           @PathVariable("photographer_id")
           String photographerId) {
 
-    return service.findById(photographerId);
+    return service.getPhotographerById(photographerId);
   }
 
   @GetMapping(value = "/{photographer_id}/ratings", produces = APPLICATION_JSON_VALUE)
@@ -132,7 +132,7 @@ public class PhotographersController {
           String photographerId,
       UriComponentsBuilder b) {
 
-    Rating saved = service.rate(photographerId, addRatingForm);
+    Rating saved = service.addRating(photographerId, addRatingForm);
 
     UriComponents uriComponents =
         b.path("/api/photographers/{photographer_id}/ratings/{rating_id}")
@@ -167,7 +167,7 @@ public class PhotographersController {
           @PathVariable("rating_id")
           String ratingId) {
 
-    return service.updateRate(photographerId, ratingId, updateRatingForm);
+    return service.updateRating(photographerId, ratingId, updateRatingForm);
   }
 
   @DeleteMapping(value = "/{photographer_id}/ratings/{rating_id}")
@@ -191,7 +191,7 @@ public class PhotographersController {
           @PathVariable("rating_id")
           String ratingId) {
 
-    service.deleteRate(photographerId, ratingId);
+    service.deleteRating(photographerId, ratingId);
 
     return ResponseEntity.noContent().build();
   }

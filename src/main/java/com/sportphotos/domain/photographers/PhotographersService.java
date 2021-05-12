@@ -18,7 +18,7 @@ public class PhotographersService {
   public List<Rating> getAllRatings(String photographerId) {
     checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");
 
-    Photographer photographer = findById(photographerId);
+    Photographer photographer = getPhotographerById(photographerId);
 
     return photographer.getRatings();
   }
@@ -27,16 +27,14 @@ public class PhotographersService {
     checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");
     checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
 
-    Photographer photographer = findById(photographerId);
-
-    return findRatingById(photographer, ratingId);
+    return getPhotographerById(photographerId).getRatingById(ratingId);
   }
 
-  public Rating rate(String photographerId, AddRatingForm addRatingForm) {
+  public Rating addRating(String photographerId, AddRatingForm addRatingForm) {
     checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");
     checkArgument(addRatingForm != null, "addRatingForm is null");
 
-    Photographer photographer = findById(photographerId);
+    Photographer photographer = getPhotographerById(photographerId);
     Rating rating = photographersMapper.map(addRatingForm);
     photographer.addRating(rating);
     photographersRepository.save(photographer);
@@ -44,7 +42,7 @@ public class PhotographersService {
     return rating;
   }
 
-  public Photographer findById(String photographerId) {
+  public Photographer getPhotographerById(String photographerId) {
     checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");
 
     return photographersRepository
@@ -55,42 +53,26 @@ public class PhotographersService {
                     String.format("Photographer - [%s] - not found.", photographerId)));
   }
 
-  public Rating updateRate(
+  public Rating updateRating(
       String photographerId, String ratingId, UpdateRatingForm updateRatingForm) {
     checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");
     checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
     checkArgument(updateRatingForm != null, "updateRatingForm is null");
 
-    Photographer photographer = findById(photographerId);
-    Rating rating = findRatingById(photographer, ratingId);
-    rating.update(updateRatingForm);
+    Photographer photographer = getPhotographerById(photographerId);
+    Rating rating = getPhotographerById(photographerId).updateRating(ratingId, updateRatingForm);
     photographersRepository.save(photographer);
 
     return rating;
   }
 
-  public void deleteRate(String photographerId, String ratingId) {
+  public void deleteRating(String photographerId, String ratingId) {
     checkArgument(!Strings.isNullOrEmpty(photographerId), "photographerId is null or empty");
     checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
 
-    Photographer photographer = findById(photographerId);
-    photographer.getRatings().removeIf(rating -> ratingId.equals(rating.getId()));
+    Photographer photographer = getPhotographerById(photographerId);
+    photographer.deleteRating(ratingId);
 
     photographersRepository.save(photographer);
-  }
-
-  private Rating findRatingById(Photographer photographer, String ratingId) {
-    checkArgument(photographer != null, "photographer is null");
-    checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
-
-    return photographer.getRatings().stream()
-        .filter(rating -> ratingId.equals(rating.getId()))
-        .findFirst()
-        .orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    String.format(
-                        "Rating - [%s] - not found for Photographer - [%s]",
-                        ratingId, photographer.getId())));
   }
 }

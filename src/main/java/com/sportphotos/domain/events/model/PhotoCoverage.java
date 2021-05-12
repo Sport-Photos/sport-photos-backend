@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -20,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class PhotoCoverage {
   private String id;
-  @Setter @DBRef private Photographer photographer;
+  @DBRef private Photographer photographer;
   private String description;
   private String link;
   private Binary bestPhoto;

@@ -49,7 +49,7 @@ class EventsControllerTestIT extends Specification {
         given: 'Some event is stored in database'
             def eventId = ObjectId.get()
             def event = randomEvent(id: eventId)
-            eventServiceMock.findById(eventId.toHexString()) >> event
+            eventServiceMock.getEventById(eventId.toHexString()) >> event
 
         expect: 'Requested Event is returned'
             given()

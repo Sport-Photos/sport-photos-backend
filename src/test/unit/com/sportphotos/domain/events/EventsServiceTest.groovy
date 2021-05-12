@@ -14,19 +14,19 @@ import static com.sportphotos.domain.model.UpdatePhotoCoverageFormMock.randomUpd
 @DomainTest
 class EventsServiceTest extends BaseDomainTest {
 
-    def 'findById should throw ResourceNotFoundException when Event not found by given id'() {
+    def 'getEventById should throw ResourceNotFoundException when Event not found by given id'() {
         when:
-            eventService.findById(UUID.randomUUID().toString())
+            eventService.getEventById(UUID.randomUUID().toString())
         then:
             thrown(ResourceNotFoundException)
     }
 
-    def 'findById should find Event by given id'() {
+    def 'getEventById should find Event by given id'() {
         given:
             def event = randomEvent()
             eventsRepository.save(event)
         when:
-            Event found = eventService.findById(event.id)
+            Event found = eventService.getEventById(event.id)
         then:
             with(found) {
                 it.id == event.id

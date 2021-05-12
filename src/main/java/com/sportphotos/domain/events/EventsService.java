@@ -21,7 +21,7 @@ public class EventsService {
   private final PhotographersRepository photographersRepository;
   private final EventsIndexProvider eventsIndexProvider;
 
-  public Event findById(String eventId) {
+  public Event getEventById(String eventId) {
     checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
 
     return eventsRepository
@@ -55,9 +55,8 @@ public class EventsService {
 
     Photographer photographer =
         photographersRepository.findByNickname(nickname).orElse(addPhotographer(nickname));
-    PhotoCoverage photoCoverage = eventMapper.map(addCoverageForm, bestPhoto);
-    photoCoverage.setPhotographer(photographer);
-    Event event = findById(eventId);
+    PhotoCoverage photoCoverage = eventMapper.map(addCoverageForm, bestPhoto, photographer);
+    Event event = getEventById(eventId);
     event.addPhotoCoverage(photoCoverage);
     eventsRepository.save(event);
 
@@ -67,28 +66,22 @@ public class EventsService {
   public List<PhotoCoverage> getAllPhotoCoverages(String eventId) {
     checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
 
-    Event event = findById(eventId);
-
-    return event.getPhotoCoverages();
+    return getEventById(eventId).getPhotoCoverages();
   }
 
   public PhotoCoverage getPhotoCoverage(String eventId, String photoCoverageId) {
     checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
     checkArgument(!Strings.isNullOrEmpty(photoCoverageId), "photoCoverageId is null or empty");
 
-    Event event = findById(eventId);
-
-    return findPhotoCoverageById(event, photoCoverageId);
+    return getEventById(eventId).getPhotoCoverageById(photoCoverageId);
   }
 
   public void deletePhotoCoverage(String eventId, String photoCoverageId) {
     checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
     checkArgument(!Strings.isNullOrEmpty(photoCoverageId), "photoCoverageId is null or empty");
 
-    Event event = findById(eventId);
-    event
-        .getPhotoCoverages()
-        .removeIf(photoCoverage -> photoCoverageId.equals(photoCoverage.getId()));
+    Event event = getEventById(eventId);
+    event.deletePhotoCoverage(photoCoverageId);
 
     eventsRepository.save(event);
   }
@@ -97,21 +90,6 @@ public class EventsService {
     Photographer photographer =
         Photographer.builder().id(UUID.randomUUID().toString()).nickname(nickname).build();
     return photographersRepository.save(photographer);
-  }
-
-  private PhotoCoverage findPhotoCoverageById(Event event, String photoCoverageId) {
-    checkArgument(event != null, "event is null");
-    checkArgument(!Strings.isNullOrEmpty(photoCoverageId), "photoCoverageId is null or empty");
-
-    return event.getPhotoCoverages().stream()
-        .filter(photoCoverage -> photoCoverageId.equals(photoCoverage.getId()))
-        .findFirst()
-        .orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    String.format(
-                        "Photo Coverage - [%s] - not found for Event - [%s]",
-                        photoCoverageId, event.getId())));
   }
 
   public PhotoCoverage updatePhotoCoverage(
@@ -124,9 +102,9 @@ public class EventsService {
     checkArgument(updatePhotoCoverageForm != null, "updatePhotoCoverageForm is null");
     checkArgument(bestPhoto != null, "bestPhoto is null");
 
-    Event event = findById(eventId);
-    PhotoCoverage photoCoverage = findPhotoCoverageById(event, photoCoverageId);
-    photoCoverage.update(updatePhotoCoverageForm, bestPhoto);
+    Event event = getEventById(eventId);
+    PhotoCoverage photoCoverage =
+        event.updatePhotoCoverage(photoCoverageId, updatePhotoCoverageForm, bestPhoto);
     eventsRepository.save(event);
 
     return photoCoverage;
