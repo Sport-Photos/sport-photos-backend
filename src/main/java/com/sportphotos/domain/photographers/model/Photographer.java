@@ -1,9 +1,8 @@
 package com.sportphotos.domain.photographers.model;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.sportphotos.domain.Preconditions.notNullOrEmpty;
+import static com.sportphotos.domain.ResourceNotFoundException.notFoundFor;
 
-import com.google.common.base.Strings;
-import com.sportphotos.domain.ResourceNotFoundException;
 import com.sportphotos.domain.photographers.UpdateRatingForm;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,29 +31,26 @@ public class Photographer {
   }
 
   public Rating updateRating(String ratingId, UpdateRatingForm updateRatingForm) {
-    checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
+    notNullOrEmpty(ratingId, "ratingId");
 
-    Rating rating = getRatingById(ratingId);
+    var rating = getRatingById(ratingId);
     rating.update(updateRatingForm);
+
     return rating;
   }
 
   public void deleteRating(String ratingId) {
-    checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
+    notNullOrEmpty(ratingId, "ratingId");
 
     ratings.removeIf(rating -> ratingId.equals(rating.getId()));
   }
 
   public Rating getRatingById(String ratingId) {
-    checkArgument(!Strings.isNullOrEmpty(ratingId), "ratingId is null or empty");
+    notNullOrEmpty(ratingId, "ratingId");
 
     return ratings.stream()
         .filter(rating -> ratingId.equals(rating.getId()))
         .findFirst()
-        .orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    String.format(
-                        "Rating - [%s] - not found for Photographer - [%s]", ratingId, id)));
+        .orElseThrow(notFoundFor("Rating", ratingId, "Photographer", id));
   }
 }

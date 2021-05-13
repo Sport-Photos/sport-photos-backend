@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
@@ -95,9 +94,8 @@ public class EventsController {
           MultipartFile avatar,
       UriComponentsBuilder b) {
 
-    Event saved = service.addEvent(addEventForm, avatar);
-
-    UriComponents uriComponents = b.path("/api/events/{event_id}").buildAndExpand(saved.getId());
+    var saved = service.addEvent(addEventForm, avatar);
+    var uriComponents = b.path("/api/events/{event_id}").buildAndExpand(saved.getId());
 
     return ResponseEntity.created(uriComponents.toUri()).body(saved);
   }
@@ -198,10 +196,9 @@ public class EventsController {
           String eventId,
       UriComponentsBuilder b) {
 
-    PhotoCoverage saved =
+    var saved =
         service.addPhotoCoverage(eventId, addCoverageForm.getNick(), addCoverageForm, bestPhoto);
-
-    UriComponents uriComponents =
+    var uriComponents =
         b.path("/api/events/{event_id}/photo_coverages/{photo_coverage_id}")
             .buildAndExpand(eventId, saved.getId());
 

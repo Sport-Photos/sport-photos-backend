@@ -1,9 +1,9 @@
 package com.sportphotos.domain.events;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.sportphotos.domain.Preconditions.notNull;
+import static com.sportphotos.domain.Preconditions.notNullOrEmpty;
+import static com.sportphotos.domain.ResourceNotFoundException.notFound;
 
-import com.google.common.base.Strings;
-import com.sportphotos.domain.ResourceNotFoundException;
 import com.sportphotos.domain.events.model.Event;
 import com.sportphotos.domain.events.model.PhotoCoverage;
 import com.sportphotos.domain.photographers.PhotographersRepository;
@@ -22,41 +22,38 @@ public class EventsService {
   private final EventsIndexProvider eventsIndexProvider;
 
   public Event getEventById(String eventId) {
-    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
+    notNullOrEmpty(eventId, "eventId");
 
-    return eventsRepository
-        .findById(eventId)
-        .orElseThrow(
-            () ->
-                new ResourceNotFoundException(String.format("Event - [%s] - not found.", eventId)));
+    return eventsRepository.findById(eventId).orElseThrow(notFound("Event", eventId));
   }
 
   public Event addEvent(AddEventForm addEventForm, MultipartFile avatar) {
-    checkArgument(addEventForm != null, "addEventForm is null");
-    checkArgument(avatar != null, "avatar is null");
+    notNull(addEventForm, "addEventForm");
+    notNull(avatar, "avatar");
 
-    Event event = eventMapper.map(addEventForm, avatar);
+    var event = eventMapper.map(addEventForm, avatar);
     eventsIndexProvider.addToIndex(event);
 
     return eventsRepository.save(event);
   }
 
   public void deleteEvent(String eventId) {
-    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
+    notNullOrEmpty(eventId, "eventId");
+
     eventsRepository.deleteById(eventId);
     eventsIndexProvider.removeFromIndex(eventId);
   }
 
   public PhotoCoverage addPhotoCoverage(
       String eventId, String nickname, AddCoverageForm addCoverageForm, MultipartFile bestPhoto) {
-    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
-    checkArgument(addCoverageForm != null, "addCoverageForm is null");
-    checkArgument(bestPhoto != null, "bestPhoto is null");
+    notNullOrEmpty(eventId, "eventId");
+    notNull(addCoverageForm, "addCoverageForm");
+    notNull(bestPhoto, "bestPhoto");
 
-    Photographer photographer =
+    var photographer =
         photographersRepository.findByNickname(nickname).orElse(addPhotographer(nickname));
-    PhotoCoverage photoCoverage = eventMapper.map(addCoverageForm, bestPhoto, photographer);
-    Event event = getEventById(eventId);
+    var photoCoverage = eventMapper.map(addCoverageForm, bestPhoto, photographer);
+    var event = getEventById(eventId);
     event.addPhotoCoverage(photoCoverage);
     eventsRepository.save(event);
 
@@ -64,30 +61,30 @@ public class EventsService {
   }
 
   public List<PhotoCoverage> getAllPhotoCoverages(String eventId) {
-    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
+    notNullOrEmpty(eventId, "eventId");
 
     return getEventById(eventId).getPhotoCoverages();
   }
 
   public PhotoCoverage getPhotoCoverage(String eventId, String photoCoverageId) {
-    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
-    checkArgument(!Strings.isNullOrEmpty(photoCoverageId), "photoCoverageId is null or empty");
+    notNullOrEmpty(eventId, "eventId");
+    notNullOrEmpty(photoCoverageId, "photoCoverageId");
 
     return getEventById(eventId).getPhotoCoverageById(photoCoverageId);
   }
 
   public void deletePhotoCoverage(String eventId, String photoCoverageId) {
-    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
-    checkArgument(!Strings.isNullOrEmpty(photoCoverageId), "photoCoverageId is null or empty");
+    notNullOrEmpty(eventId, "eventId");
+    notNullOrEmpty(photoCoverageId, "photoCoverageId");
 
-    Event event = getEventById(eventId);
+    var event = getEventById(eventId);
     event.deletePhotoCoverage(photoCoverageId);
 
     eventsRepository.save(event);
   }
 
   private Photographer addPhotographer(String nickname) {
-    Photographer photographer =
+    var photographer =
         Photographer.builder().id(UUID.randomUUID().toString()).nickname(nickname).build();
     return photographersRepository.save(photographer);
   }
@@ -97,13 +94,13 @@ public class EventsService {
       String photoCoverageId,
       UpdatePhotoCoverageForm updatePhotoCoverageForm,
       MultipartFile bestPhoto) {
-    checkArgument(!Strings.isNullOrEmpty(eventId), "eventId is null or empty");
-    checkArgument(!Strings.isNullOrEmpty(photoCoverageId), "photoCoverageId is null or empty");
-    checkArgument(updatePhotoCoverageForm != null, "updatePhotoCoverageForm is null");
-    checkArgument(bestPhoto != null, "bestPhoto is null");
+    notNullOrEmpty(eventId, "eventId");
+    notNullOrEmpty(photoCoverageId, "photoCoverageId");
+    notNull(updatePhotoCoverageForm, "updatePhotoCoverageForm");
+    notNull(bestPhoto, "bestPhoto");
 
-    Event event = getEventById(eventId);
-    PhotoCoverage photoCoverage =
+    var event = getEventById(eventId);
+    var photoCoverage =
         event.updatePhotoCoverage(photoCoverageId, updatePhotoCoverageForm, bestPhoto);
     eventsRepository.save(event);
 

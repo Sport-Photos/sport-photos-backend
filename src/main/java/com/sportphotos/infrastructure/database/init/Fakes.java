@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.security.SecureRandom;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +31,8 @@ import org.bson.types.Binary;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Fakes {
 
-  private static final Faker faker = new Faker();
+  private static final SecureRandom random = new SecureRandom();
+  private static final Faker faker = new Faker(random);
   private static int nicknameCounter = 10000;
   private static int eventNameCounter = 10000;
 
@@ -153,7 +155,7 @@ public final class Fakes {
   }
 
   private static int randomInt(int num) {
-    return (int) (Math.random() * num);
+    return random.nextInt(num);
   }
 
   private static <T> T choose(List<T> objects) {

@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
@@ -132,9 +131,8 @@ public class PhotographersController {
           String photographerId,
       UriComponentsBuilder b) {
 
-    Rating saved = service.addRating(photographerId, addRatingForm);
-
-    UriComponents uriComponents =
+    var saved = service.addRating(photographerId, addRatingForm);
+    var uriComponents =
         b.path("/api/photographers/{photographer_id}/ratings/{rating_id}")
             .buildAndExpand(photographerId, saved.getId());
 
