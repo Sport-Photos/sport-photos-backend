@@ -1,8 +1,9 @@
 package com.sportphotos.interfaces.rest.events
 
 import com.sportphotos.domain.events.AddEventForm
-import com.sportphotos.domain.events.EventsRepository
 import com.sportphotos.domain.events.EventsService
+import com.sportphotos.infrastructure.database.EventSummary
+import com.sportphotos.infrastructure.database.EventsQueryRepository
 import com.sportphotos.interfaces.rest.ControllerTest
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,13 +29,13 @@ class EventsControllerTestIT extends Specification {
     EventsService eventServiceMock
 
     @Autowired
-    EventsRepository eventsRepositoryMock
+    EventsQueryRepository repository
 
-    def 'GET /api/events should return all events'() {
+    def 'GET /api/events should return list of event summaries'() {
         given: 'Two events are stored in database'
             def event1 = randomEvent()
             def event2 = randomEvent()
-            eventsRepositoryMock.findAll() >> [event1, event2]
+            repository.findEventSummaries() >> [EventSummary.from(event1), EventSummary.from(event2)]
 
         expect: 'Both events are returned'
             given()
@@ -42,7 +43,17 @@ class EventsControllerTestIT extends Specification {
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body('[0].id', equalTo(event1.id))
+                .body('[0].date', equalTo(event1.date.toString()))
+                .body('[0].name', equalTo(event1.name))
+                .body('[0].location.city', equalTo(event1.location.city))
+                .body('[0].location.country', equalTo(event1.location.country))
+                .body('[0].avatar', notNullValue())
                 .body('[1].id', equalTo(event2.id))
+                .body('[1].date', equalTo(event2.date.toString()))
+                .body('[1].name', equalTo(event2.name))
+                .body('[1].location.city', equalTo(event2.location.city))
+                .body('[1].location.country', equalTo(event2.location.country))
+                .body('[1].avatar', notNullValue())
     }
 
     def 'GET /api/events/{event_id} should return single event'() {

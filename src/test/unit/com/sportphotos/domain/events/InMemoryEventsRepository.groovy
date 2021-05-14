@@ -10,11 +10,6 @@ class InMemoryEventsRepository implements EventsRepository, Clearable {
     final Map<String, Event> data = new ConcurrentHashMap<>()
 
     @Override
-    List<Event> findAll() {
-        new ArrayList<>(data.values())
-    }
-
-    @Override
     Optional<Event> findById(String eventId) {
         Optional.ofNullable(data.values().find { it.id == eventId })
     }

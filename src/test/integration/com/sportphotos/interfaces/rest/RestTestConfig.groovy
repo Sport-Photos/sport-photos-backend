@@ -6,6 +6,7 @@ import com.sportphotos.domain.events.EventsService
 import com.sportphotos.domain.photographers.PhotographersMapper
 import com.sportphotos.domain.photographers.PhotographersRepository
 import com.sportphotos.domain.photographers.PhotographersService
+import com.sportphotos.infrastructure.database.EventsQueryRepository
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import spock.mock.DetachedMockFactory
@@ -38,6 +39,11 @@ class RestTestConfig {
     @Bean
     EventsRepository eventsRepository() {
         factory.Mock(EventsRepository)
+    }
+
+    @Bean
+    EventsQueryRepository eventsQueryRepository() {
+        factory.Mock(EventsQueryRepository)
     }
 
     @Bean
