@@ -31,10 +31,10 @@ jobs:
       - name: Add execute access to maven wrapper
         run: chmod 755 gradlew
 
-      - name: Build
-        run: ./gradlew build -x test --info --stacktrace
+      - name: Build and test
+        run: ./gradlew build --info --stacktrace
 
-      - name: Test and verify
+      - name: Sonarqube analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
