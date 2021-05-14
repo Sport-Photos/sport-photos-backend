@@ -5,11 +5,12 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import com.sportphotos.domain.events.AddCoverageForm;
 import com.sportphotos.domain.events.AddEventForm;
-import com.sportphotos.domain.events.EventsRepository;
 import com.sportphotos.domain.events.EventsService;
 import com.sportphotos.domain.events.UpdatePhotoCoverageForm;
 import com.sportphotos.domain.events.model.Event;
 import com.sportphotos.domain.events.model.PhotoCoverage;
+import com.sportphotos.infrastructure.database.EventSummary;
+import com.sportphotos.infrastructure.database.EventsQueryRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,18 +40,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class EventsController {
 
-  private final EventsRepository repository;
+  private final EventsQueryRepository repository;
   private final EventsService service;
 
   @GetMapping(produces = APPLICATION_JSON_VALUE)
-  @Operation(summary = "Returns all events")
+  @Operation(summary = "Returns summary of all events")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "500", description = "Server failure")
       })
-  public List<Event> getEvents() {
-    return repository.findAll();
+  public List<EventSummary> getEventSummaries() {
+    return repository.findEventSummaries();
   }
 
   @GetMapping(value = "/{event_id}", produces = APPLICATION_JSON_VALUE)
