@@ -8,7 +8,7 @@ buildscript {
         springCloudVersion = 'Hoxton.SR11'
         groovyVersion = '3.0.8'
         spockVersion = '1.3-groovy-2.5'
-        spockReportsVersion = '1.8.0'
+        spockReportsVersion = '2.0-groovy-3.0'
         testcontainersVersion = '1.15.3'
         archunitVersion = '0.18.0'
         restAssuredVersion = '4.2.0'
