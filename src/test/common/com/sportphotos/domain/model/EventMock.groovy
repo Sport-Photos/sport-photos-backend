@@ -1,11 +1,11 @@
 package com.sportphotos.domain.model
 
 import com.github.javafaker.Faker
+import com.sportphotos.domain.events.AddEventForm
 import com.sportphotos.domain.events.model.Event
 import com.sportphotos.domain.events.model.Location
 import org.bson.BsonBinarySubType
 import org.bson.types.Binary
-import org.bson.types.ObjectId
 
 import java.time.ZoneId
 import java.util.concurrent.TimeUnit
@@ -19,6 +19,20 @@ class EventMock {
 
     static def randomEvent(Map overriddenValues = [:]) {
         new Event(randomValues() + overriddenValues)
+    }
+
+    static def randomEvent(AddEventForm addEventForm) {
+        def overrides = [
+            date          : addEventForm.date,
+            name          : addEventForm.name,
+            location      : new Location(
+                city: addEventForm.city,
+                country: addEventForm.country
+            ),
+            photoCoverages: []
+        ]
+
+        randomEvent(overrides)
     }
 
     static def randomValues() {

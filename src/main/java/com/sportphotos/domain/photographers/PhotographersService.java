@@ -57,7 +57,7 @@ public class PhotographersService {
     notNull(updateRatingForm, "updateRatingForm");
 
     var photographer = getPhotographerById(photographerId);
-    var rating = getPhotographerById(photographerId).updateRating(ratingId, updateRatingForm);
+    var rating = photographer.updateRating(ratingId, updateRatingForm);
     photographersRepository.save(photographer);
 
     return rating;

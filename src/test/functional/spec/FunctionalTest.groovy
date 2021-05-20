@@ -11,11 +11,12 @@ import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 import java.lang.annotation.Target
 
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
-
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@SpringBootTest(classes = [Application], webEnvironment = RANDOM_PORT)
+@SpringBootTest(
+    classes = [Application, FunctionTestConfig],
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 @ActiveProfiles('test')
 @ContextConfiguration(initializers = [MongoDatabaseInitializer])
 @interface FunctionalTest {
