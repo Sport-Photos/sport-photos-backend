@@ -8,6 +8,7 @@ import com.sportphotos.domain.events.model.Event;
 import com.sportphotos.domain.events.model.PhotoCoverage;
 import com.sportphotos.domain.photographers.PhotographersRepository;
 import com.sportphotos.domain.photographers.model.Photographer;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +86,11 @@ public class EventsService {
 
   private Photographer addPhotographer(String nickname) {
     var photographer =
-        Photographer.builder().id(UUID.randomUUID().toString()).nickname(nickname).build();
+        Photographer.builder()
+            .id(UUID.randomUUID().toString())
+            .nickname(nickname)
+            .ratings(Collections.emptyList())
+            .build();
     return photographersRepository.save(photographer);
   }
 

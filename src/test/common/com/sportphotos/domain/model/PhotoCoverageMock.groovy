@@ -1,6 +1,8 @@
 package com.sportphotos.domain.model
 
 import com.github.javafaker.Faker
+import com.sportphotos.domain.events.AddCoverageForm
+import com.sportphotos.domain.events.UpdatePhotoCoverageForm
 import com.sportphotos.domain.events.model.PhotoCoverage
 import org.bson.BsonBinarySubType
 import org.bson.types.Binary
@@ -14,6 +16,27 @@ class PhotoCoverageMock {
 
     static def randomPhotoCoverage(Map overriddenValues = [:]) {
         new PhotoCoverage(randomValues() + overriddenValues)
+    }
+
+    static def randomPhotoCoverage(AddCoverageForm addCoverageForm) {
+        def overrides = [
+            photographer: randomPhotographer(
+                nickname: addCoverageForm.nick
+            ),
+            description : addCoverageForm.description,
+            link        : addCoverageForm.link
+        ]
+
+        randomPhotoCoverage(overrides)
+    }
+
+    static def randomPhotoCoverage(UpdatePhotoCoverageForm addCoverageForm) {
+        def overrides = [
+            description: addCoverageForm.description,
+            link       : addCoverageForm.link
+        ]
+
+        randomPhotoCoverage(overrides)
     }
 
     static def randomValues() {

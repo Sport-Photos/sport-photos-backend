@@ -2,3 +2,7 @@ algolia:
   application_id: PLACEHOLDER
   api_key: PLACEHOLDER
   index_name: PLACEHOLDER
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
