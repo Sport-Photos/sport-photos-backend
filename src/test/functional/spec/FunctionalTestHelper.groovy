@@ -2,13 +2,9 @@ package spec
 
 import com.sportphotos.domain.events.AddCoverageForm
 import com.sportphotos.domain.events.AddEventForm
-import com.sportphotos.domain.events.model.Event
 import com.sportphotos.domain.photographers.AddRatingForm
-import com.sportphotos.domain.photographers.model.Photographer
 import io.restassured.http.ContentType
 import org.springframework.boot.test.context.TestComponent
-import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.query.Query
 import org.springframework.http.HttpStatus
 
 import static io.restassured.RestAssured.given
@@ -18,11 +14,8 @@ class FunctionalTestHelper {
 
     int port
 
-    MongoTemplate mongoTemplate
-
-    FunctionalTestHelper(int port, MongoTemplate mongoTemplate) {
+    FunctionalTestHelper(int port) {
         this.port = port
-        this.mongoTemplate = mongoTemplate
     }
 
     def createEvent(AddEventForm addEventForm, byte[] avatar) {
@@ -110,10 +103,5 @@ class FunctionalTestHelper {
 
     static def getIdFromResponseBody(def response) {
         response.body().jsonPath().getString('id')
-    }
-
-    def cleanDatabase() {
-        mongoTemplate.remove(new Query(), Event)
-        mongoTemplate.remove(new Query(), Photographer)
     }
 }

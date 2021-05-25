@@ -1,5 +1,6 @@
 package spec
 
+import com.sportphotos.integration.MongoTestHelper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import spock.lang.Specification
@@ -20,8 +21,11 @@ class EventsFT extends Specification {
     @Autowired
     FunctionalTestHelper ftHelper
 
+    @Autowired
+    MongoTestHelper mongoHelper
+
     def setup() {
-        ftHelper.cleanDatabase()
+        mongoHelper.cleanDatabase()
     }
 
     def 'GET /api/events should return list of event summaries stored in database'() {
