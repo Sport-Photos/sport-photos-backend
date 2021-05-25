@@ -1,6 +1,7 @@
 package spec
 
 import com.sportphotos.domain.events.EventsIndexProvider
+import com.sportphotos.integration.MongoTestHelper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
@@ -16,8 +17,14 @@ class FunctionTestConfig {
 
     @Lazy
     @Bean
-    FunctionalTestHelper functionalTestHelper(@Value('${local.server.port}') int port, MongoTemplate mongoTemplate) {
-        new FunctionalTestHelper(port, mongoTemplate)
+    FunctionalTestHelper functionalTestHelper(@Value('${local.server.port}') int port) {
+        new FunctionalTestHelper(port)
+    }
+
+    @Lazy
+    @Bean
+    MongoTestHelper mongoTestHelper(MongoTemplate mongoTemplate) {
+        new MongoTestHelper(mongoTemplate)
     }
 
     @Primary

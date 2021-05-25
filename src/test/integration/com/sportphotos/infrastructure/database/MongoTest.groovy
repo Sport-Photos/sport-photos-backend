@@ -17,6 +17,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(classes = [Application], webEnvironment = NONE)
 @ActiveProfiles('test')
-@ContextConfiguration(initializers = [MongoDatabaseInitializer])
+@ContextConfiguration(classes = [MongoTestConfig], initializers = [MongoDatabaseInitializer])
 @interface MongoTest {
 }

@@ -1,5 +1,6 @@
 package spec
 
+import com.sportphotos.integration.MongoTestHelper
 import io.restassured.http.ContentType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -22,8 +23,11 @@ class PhotographersFT extends Specification {
     @Autowired
     FunctionalTestHelper ftHelper
 
+    @Autowired
+    MongoTestHelper mongoHelper
+
     def setup() {
-        ftHelper.cleanDatabase()
+        mongoHelper.cleanDatabase()
     }
 
     def 'GET /api/photographers should get all photographers'() {

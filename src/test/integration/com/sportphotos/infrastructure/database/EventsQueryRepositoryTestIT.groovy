@@ -1,6 +1,6 @@
 package com.sportphotos.infrastructure.database
 
-
+import com.sportphotos.integration.MongoTestHelper
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 
@@ -11,6 +11,13 @@ class EventsQueryRepositoryTestIT extends Specification {
 
     @Autowired
     EventsQueryRepository repository
+
+    @Autowired
+    MongoTestHelper mongoHelper
+
+    def setup() {
+        mongoHelper.cleanDatabase()
+    }
 
     def 'findEventSummaries should return list of Event summaries'() {
         given:
