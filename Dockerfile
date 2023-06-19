@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11.0.10_9-jdk-hotspot AS gradle-build
+FROM adoptopenjdk:11.0.11_9-jdk-hotspot AS gradle-build
 WORKDIR /buildtmp
 COPY . ./
 RUN chmod 777 gradlew
