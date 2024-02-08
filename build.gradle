@@ -14,7 +14,7 @@ buildscript {
         restAssuredVersion = '4.2.0'
         javaFakerVersion = '1.0.2'
         guavaVersion = '30.1.1-jre'
-        algoliaVersion = '3.14.2'
+        algoliaVersion = '3.16.9'
     }
 }
 
